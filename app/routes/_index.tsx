@@ -1,5 +1,6 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, Link, Form, useSearchParams } from "@remix-run/react";
+import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
 import { prisma } from "~/lib/db.server";
 import { formatDate, getRelativeTime } from "~/lib/utils";
 
@@ -38,7 +39,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     },
   });
 
-  return json({ articles, categories: categories.map((c) => c.category) });
+  return json({ articles, categories: categories.map((c: { category: any; }) => c.category) });
 }
 
 export default function Index() {
@@ -88,7 +89,7 @@ export default function Index() {
               >
                 All
               </Link>
-              {categories.map((cat) => (
+              {categories.map((cat:any) => (
                 <Link
                   key={cat}
                   to={`/?filter=${encodeURIComponent(cat)}`}
@@ -136,7 +137,7 @@ export default function Index() {
                     </td>
                   </tr>
                 ) : (
-                  articles.map((article) => (
+                  articles.map((article: { id: Key | null | undefined; title: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; children: string | any[]; category: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; createdAt: string | Date; updatedAt: string | Date; }) => (
                     <tr key={article.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4">
                         <div className="flex flex-col">

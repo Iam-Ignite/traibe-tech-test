@@ -1,5 +1,6 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, Link } from "@remix-run/react";
+import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
 import { prisma } from "~/lib/db.server";
 import { formatDate } from "~/lib/utils";
 
@@ -86,7 +87,7 @@ export default function ArticleDetail() {
               Related Articles ({article.children.length})
             </h2>
             <div className="space-y-3">
-              {article.children.map((child) => (
+              {article.children.map((child: { id: Key | null | undefined; title: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; category: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }) => (
                 <Link
                   key={child.id}
                   to={`/articles/${child.id}`}

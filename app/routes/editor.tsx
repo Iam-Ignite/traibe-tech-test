@@ -2,7 +2,6 @@ import { json, redirect, type LoaderFunctionArgs, type ActionFunctionArgs, type 
 import { useLoaderData, useActionData, Link, Form } from "@remix-run/react";
 import { prisma } from "~/lib/db.server";
 import { generateSlug } from "~/lib/utils";
-import { requireAuth } from "~/lib/auth.server";
 import { useState, useEffect } from "react";
 // Define Article type if not exported from @prisma/client
 type Article = {
@@ -12,7 +11,6 @@ type Article = {
   category: string;
   content: string;
   parentId: string | null;
-  authorId: string;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -33,9 +31,6 @@ type ActionResponse =
 
 // Loader
 export async function loader({ request }: LoaderFunctionArgs) {
-  // Require authentication
-  await requireAuth(request);
-
   const url = new URL(request.url);
   const articleId = url.searchParams.get("article");
 
@@ -49,7 +44,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // Group articles by category
   const categoryMap = new Map<string, ArticleWithChildren[]>();
 
-  articles.forEach((article) => {
+  articles.forEach((article: ArticleWithChildren) => {
     if (!categoryMap.has(article.category)) {
       categoryMap.set(article.category, []);
     }
@@ -72,9 +67,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 // Action
 export async function action({ request }: ActionFunctionArgs) {
-  // Require authentication
-  const { user } = await requireAuth(request);
-
   const formData = await request.formData();
   const id = formData.get("id")?.toString();
   const title = formData.get("title")?.toString();
@@ -106,7 +98,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const article = await prisma.article.update({
       where: { id },
-      data: { title, slug, category, content, parentId, authorId: user.id },
+      data: { title, slug, category, content, parentId },
     });
 
     return json<ActionResponse>({ success: true, article });
@@ -122,7 +114,7 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     const article = await prisma.article.create({
-      data: { title, slug, category, content, parentId, authorId: user.id },
+      data: { title, slug, category, content, parentId },
     });
 
     return redirect(`/editor?article=${article.id}`);

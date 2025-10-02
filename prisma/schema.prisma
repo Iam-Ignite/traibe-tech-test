@@ -7,16 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String    @id @default(cuid())
-  email     String    @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  articles  Article[]
-
-  @@index([email])
-}
-
 model Article {
   id        String    @id @default(cuid())
   title     String
@@ -24,8 +14,6 @@ model Article {
   content   String    @db.Text
   category  String
   parentId  String?
-  authorId  String?
-  author    User?     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   parent    Article?  @relation("ArticleTree", fields: [parentId], references: [id], onDelete: Cascade)
   children  Article[] @relation("ArticleTree")
   createdAt DateTime  @default(now())
@@ -34,5 +22,4 @@ model Article {
   @@index([parentId])
   @@index([category])
   @@index([slug])
-  @@index([authorId])
 }
