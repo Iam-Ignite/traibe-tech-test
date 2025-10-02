@@ -12,11 +12,17 @@ export default defineConfig({
         v3_relativeSplatPath: true,
         v3_throwAbortReason: true,
       },
+      serverDependenciesToBundle: [
+        "@prisma/client",
+      ],
     }),
   ],
   resolve: {
     alias: {
       "~": path.resolve(__dirname, "./app"),
     },
+  },
+  ssr: {
+    noExternal: ["@prisma/client"],
   },
 });
