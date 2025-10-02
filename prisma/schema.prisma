@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://postgres:jWaanlnE6Vi42J6u@db.qzvazvvpjzcspxohcgqz.supabase.co:5432/postgres"
 }
 
 model Article {
@@ -14,6 +14,7 @@ model Article {
   content   String    @db.Text
   category  String
   parentId  String?
+  
   parent    Article?  @relation("ArticleTree", fields: [parentId], references: [id], onDelete: Cascade)
   children  Article[] @relation("ArticleTree")
   createdAt DateTime  @default(now())
