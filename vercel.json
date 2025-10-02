@@ -1,0 +1,12 @@
+{
+  "functions": {
+    "build/server/index.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "includeFiles": [
+    "node_modules/.prisma/**",
+    "node_modules/@prisma/engines/**"
+  ]
+}
