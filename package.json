@@ -9,8 +9,7 @@
     "dev": "remix vite:dev",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
-    "db:seed": "tsx prisma/seed.ts",
-    "postinstall": "prisma generate"
+    "db:seed": "tsx prisma/seed.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
